@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace NobelLaureates
 {
-    public class Class1
+    public enum ConnectionType
     {
+        JSON,
+        CSV
     }
 }
