@@ -11,6 +11,13 @@ namespace NobelLaureates.Models
         public int Year { get; set; }
         public string Category { get; set; }
         public string OverallMotivation { get; set; }
-        public List<LaureateModel> Laureates { get; set; }
+        public List<LaureateModel> Laureates { get; set; } = new List<LaureateModel>();
+
+        public PrizeModel(string year, string category, string overallMotivation)
+        {
+            Year = int.Parse(year);
+            Category = category;
+            OverallMotivation = overallMotivation;
+        }
     }
 }

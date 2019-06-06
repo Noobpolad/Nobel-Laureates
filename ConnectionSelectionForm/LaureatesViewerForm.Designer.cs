@@ -35,25 +35,28 @@
             this.SurnameLabel = new System.Windows.Forms.Label();
             this.NameLabel = new System.Windows.Forms.Label();
             this.SetDateCheckBox = new System.Windows.Forms.CheckBox();
-            this.FromDateDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.FromDateLabel = new System.Windows.Forms.Label();
             this.ToDateLabel = new System.Windows.Forms.Label();
-            this.ToDateDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.NumberOfLaureatesTrackBar = new System.Windows.Forms.TrackBar();
             this.NumberOfLaureatesTextBox = new System.Windows.Forms.TextBox();
             this.NUmberOfLaureatesLabel = new System.Windows.Forms.Label();
             this.ResetFiltersLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SearchButton = new System.Windows.Forms.Button();
+            this.FromDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.ToDateTimePicker = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.PrizesDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfLaureatesTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // PrizesDataGridView
             // 
+            this.PrizesDataGridView.AllowUserToAddRows = false;
+            this.PrizesDataGridView.AllowUserToDeleteRows = false;
             this.PrizesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PrizesDataGridView.Location = new System.Drawing.Point(492, 34);
             this.PrizesDataGridView.Name = "PrizesDataGridView";
-            this.PrizesDataGridView.Size = new System.Drawing.Size(432, 430);
+            this.PrizesDataGridView.ReadOnly = true;
+            this.PrizesDataGridView.Size = new System.Drawing.Size(660, 430);
             this.PrizesDataGridView.TabIndex = 0;
             // 
             // FilterLabel
@@ -117,14 +120,7 @@
             this.SetDateCheckBox.TabIndex = 6;
             this.SetDateCheckBox.Text = "Set date";
             this.SetDateCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // FromDateDateTimePicker
-            // 
-            this.FromDateDateTimePicker.Enabled = false;
-            this.FromDateDateTimePicker.Location = new System.Drawing.Point(136, 289);
-            this.FromDateDateTimePicker.Name = "FromDateDateTimePicker";
-            this.FromDateDateTimePicker.Size = new System.Drawing.Size(261, 20);
-            this.FromDateDateTimePicker.TabIndex = 7;
+            this.SetDateCheckBox.CheckedChanged += new System.EventHandler(this.SetDateCheckBox_CheckedChanged);
             // 
             // FromDateLabel
             // 
@@ -134,9 +130,10 @@
             this.FromDateLabel.ForeColor = System.Drawing.SystemColors.Highlight;
             this.FromDateLabel.Location = new System.Drawing.Point(13, 286);
             this.FromDateLabel.Name = "FromDateLabel";
-            this.FromDateLabel.Size = new System.Drawing.Size(112, 25);
+            this.FromDateLabel.Size = new System.Drawing.Size(113, 25);
             this.FromDateLabel.TabIndex = 9;
-            this.FromDateLabel.Text = "From Date";
+            this.FromDateLabel.Text = "From Year";
+            this.FromDateLabel.Click += new System.EventHandler(this.FromDateLabel_Click);
             // 
             // ToDateLabel
             // 
@@ -146,24 +143,18 @@
             this.ToDateLabel.ForeColor = System.Drawing.SystemColors.Highlight;
             this.ToDateLabel.Location = new System.Drawing.Point(13, 329);
             this.ToDateLabel.Name = "ToDateLabel";
-            this.ToDateLabel.Size = new System.Drawing.Size(88, 25);
+            this.ToDateLabel.Size = new System.Drawing.Size(89, 25);
             this.ToDateLabel.TabIndex = 11;
-            this.ToDateLabel.Text = "To Date";
-            // 
-            // ToDateDateTimePicker
-            // 
-            this.ToDateDateTimePicker.Enabled = false;
-            this.ToDateDateTimePicker.Location = new System.Drawing.Point(136, 332);
-            this.ToDateDateTimePicker.Name = "ToDateDateTimePicker";
-            this.ToDateDateTimePicker.Size = new System.Drawing.Size(261, 20);
-            this.ToDateDateTimePicker.TabIndex = 10;
+            this.ToDateLabel.Text = "To Year";
             // 
             // NumberOfLaureatesTrackBar
             // 
             this.NumberOfLaureatesTrackBar.Location = new System.Drawing.Point(18, 419);
+            this.NumberOfLaureatesTrackBar.Maximum = 4;
             this.NumberOfLaureatesTrackBar.Name = "NumberOfLaureatesTrackBar";
             this.NumberOfLaureatesTrackBar.Size = new System.Drawing.Size(261, 45);
             this.NumberOfLaureatesTrackBar.TabIndex = 12;
+            this.NumberOfLaureatesTrackBar.Scroll += new System.EventHandler(this.NumberOfLaureatesTrackBar_Scroll);
             // 
             // NumberOfLaureatesTextBox
             // 
@@ -196,32 +187,56 @@
             this.ResetFiltersLinkLabel.TabIndex = 15;
             this.ResetFiltersLinkLabel.TabStop = true;
             this.ResetFiltersLinkLabel.Text = "Reset Filters";
+            this.ResetFiltersLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ResetFiltersLinkLabel_LinkClicked);
             // 
             // SearchButton
             // 
             this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SearchButton.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.SearchButton.Location = new System.Drawing.Point(375, 489);
+            this.SearchButton.Location = new System.Drawing.Point(459, 498);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(199, 44);
             this.SearchButton.TabIndex = 16;
             this.SearchButton.Text = "Search";
             this.SearchButton.UseVisualStyleBackColor = true;
+            this.SearchButton.Click += new System.EventHandler(this.SearchButton_Click);
+            // 
+            // FromDateTimePicker
+            // 
+            this.FromDateTimePicker.CustomFormat = "yyyy";
+            this.FromDateTimePicker.Enabled = false;
+            this.FromDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.FromDateTimePicker.Location = new System.Drawing.Point(132, 289);
+            this.FromDateTimePicker.Name = "FromDateTimePicker";
+            this.FromDateTimePicker.ShowUpDown = true;
+            this.FromDateTimePicker.Size = new System.Drawing.Size(255, 20);
+            this.FromDateTimePicker.TabIndex = 17;
+            // 
+            // ToDateTimePicker
+            // 
+            this.ToDateTimePicker.CustomFormat = "yyyy";
+            this.ToDateTimePicker.Enabled = false;
+            this.ToDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.ToDateTimePicker.Location = new System.Drawing.Point(132, 332);
+            this.ToDateTimePicker.Name = "ToDateTimePicker";
+            this.ToDateTimePicker.ShowUpDown = true;
+            this.ToDateTimePicker.Size = new System.Drawing.Size(255, 20);
+            this.ToDateTimePicker.TabIndex = 19;
             // 
             // LaureatesViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(969, 554);
+            this.ClientSize = new System.Drawing.Size(1206, 554);
+            this.Controls.Add(this.ToDateTimePicker);
+            this.Controls.Add(this.FromDateTimePicker);
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.ResetFiltersLinkLabel);
             this.Controls.Add(this.NUmberOfLaureatesLabel);
             this.Controls.Add(this.NumberOfLaureatesTextBox);
             this.Controls.Add(this.NumberOfLaureatesTrackBar);
             this.Controls.Add(this.ToDateLabel);
-            this.Controls.Add(this.ToDateDateTimePicker);
             this.Controls.Add(this.FromDateLabel);
-            this.Controls.Add(this.FromDateDateTimePicker);
             this.Controls.Add(this.SetDateCheckBox);
             this.Controls.Add(this.NameLabel);
             this.Controls.Add(this.SurnameLabel);
@@ -247,14 +262,14 @@
         private System.Windows.Forms.Label SurnameLabel;
         private System.Windows.Forms.Label NameLabel;
         private System.Windows.Forms.CheckBox SetDateCheckBox;
-        private System.Windows.Forms.DateTimePicker FromDateDateTimePicker;
         private System.Windows.Forms.Label FromDateLabel;
         private System.Windows.Forms.Label ToDateLabel;
-        private System.Windows.Forms.DateTimePicker ToDateDateTimePicker;
         private System.Windows.Forms.TrackBar NumberOfLaureatesTrackBar;
         private System.Windows.Forms.TextBox NumberOfLaureatesTextBox;
         private System.Windows.Forms.Label NUmberOfLaureatesLabel;
         private System.Windows.Forms.LinkLabel ResetFiltersLinkLabel;
         private System.Windows.Forms.Button SearchButton;
+        private System.Windows.Forms.DateTimePicker FromDateTimePicker;
+        private System.Windows.Forms.DateTimePicker ToDateTimePicker;
     }
 }

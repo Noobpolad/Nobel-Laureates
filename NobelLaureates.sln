@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NobelLaureates", "NobelLaur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionSelectionForm", "ConnectionSelectionForm\ConnectionSelectionForm.csproj", "{4FE9BC25-2C8B-40F6-ADF2-2013E1479FF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{6D80571F-0B70-417F-8E64-DFCBD8D441B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4FE9BC25-2C8B-40F6-ADF2-2013E1479FF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE9BC25-2C8B-40F6-ADF2-2013E1479FF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FE9BC25-2C8B-40F6-ADF2-2013E1479FF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D80571F-0B70-417F-8E64-DFCBD8D441B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D80571F-0B70-417F-8E64-DFCBD8D441B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D80571F-0B70-417F-8E64-DFCBD8D441B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D80571F-0B70-417F-8E64-DFCBD8D441B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
