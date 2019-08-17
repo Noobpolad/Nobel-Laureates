@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,39 +16,68 @@ namespace ConnectionSelectionForm
 {
     public partial class LaureatesViewerForm : Form
     {
+        List<string> Categories = new List<string>();
+
         public LaureatesViewerForm()
         {
             InitializeComponent();
-            GlobalConfig.Connection.InitializePrizes();
-            WireUpBox(GlobalConfig.Connection.ConverPrizesToRepresentationObjects(GlobalConfig.Connection.Container.Prizes));
+            InitializeEvents();
+            InitializeData();
+            this.Show();
         }
 
-
-        private void WireUpBox(List<RepresentationObject> data)
+        private async void InitializeData()
         {
+            await Task.Run(() => GlobalConfig.Connection.InitializePrizes());
+            InitializeCategories();
+            WireUpCategoriesComboBox();
+            WireUpBox(GlobalConfig.Connection.Container.Prizes);
+        }
+
+        private void InitializeCategories()
+        {
+            foreach (PrizeModel prize in GlobalConfig.Connection.Container.Prizes)
+            {
+                if (!Categories.Contains(prize.Category))
+                {
+                    Categories.Add(prize.Category);
+                }
+            }
+        }
+
+        private void WireUpCategoriesComboBox()
+        {
+            CategoryComboBox.DataSource = Categories;
+        }
+
+        private void InitializeEvents()
+        {
+            PrizesDataGridView.DataBindingComplete += PrizesDataGridView_DataBindingComplete;
+        }
+
+        private void PrizesDataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            SearchButton.Enabled = true;
+        }
+
+        private async void WireUpBox(List<PrizeModel> data)
+        {
+            List<RepresentationObject> presentationData = await Task.Run(() => GlobalConfig.Connection.ConverPrizesToRepresentationObjects(data));
             BindingSource binding = new BindingSource();
-            binding.DataSource = data;
+            binding.DataSource = presentationData;
             PrizesDataGridView.DataSource = binding;
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void SetAddFiltersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void NumberOfLaureatesTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void SetDateCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (SetDateCheckBox.Checked)
+            if (SetAddFiltersCheckBox.Checked)
             {
                 FromDateTimePicker.Enabled = true;
                 ToDateTimePicker.Enabled = true;
                 FromDateLabel.Enabled = true;
                 ToDateLabel.Enabled = true;
+                CategoryLabel.Enabled = true;
+                CategoryComboBox.Enabled = true;
             }
             else
             {
@@ -55,6 +85,8 @@ namespace ConnectionSelectionForm
                 ToDateTimePicker.Enabled = false;
                 FromDateLabel.Enabled = false;
                 ToDateLabel.Enabled = false;
+                CategoryLabel.Enabled = false;
+                CategoryComboBox.Enabled = false;
             }
         }
 
@@ -62,11 +94,12 @@ namespace ConnectionSelectionForm
         {
             NameValueTextBox.Text = "";
             SurnameValueTextBox.Text = "";
-            SetDateCheckBox.CheckState = CheckState.Unchecked;
+            SetAddFiltersCheckBox.CheckState = CheckState.Unchecked;
             NumberOfLaureatesTextBox.Text = "0";
             NumberOfLaureatesTrackBar.Value = 0;
             FromDateTimePicker.Value = DateTime.Now;
             ToDateTimePicker.Value = DateTime.Now;
+            WireUpBox(GlobalConfig.Connection.Container.Prizes);
         }
 
         private void NumberOfLaureatesTrackBar_Scroll(object sender, EventArgs e)
@@ -77,31 +110,32 @@ namespace ConnectionSelectionForm
         private void SearchButton_Click(object sender, EventArgs e)
         {
             List<PrizeModel> output = GlobalConfig.Connection.Container.Prizes;
+            SearchButton.Enabled = false;
+            output = PerformFiltration(output);
+            WireUpBox(output);
+        }
 
+        private List<PrizeModel> PerformFiltration(List<PrizeModel> data)
+        {
             if (NameValueTextBox.Text.Length != 0)
             {
-                output = GlobalConfig.Connection.FilterOnName(NameValueTextBox.Text, GlobalConfig.Connection.Container.Prizes);
+                data = GlobalConfig.Connection.FilterOnName(NameValueTextBox.Text, data);
             }
             if (SurnameValueTextBox.Text.Length != 0)
             {
-                output = GlobalConfig.Connection.FilterOnSurname(SurnameValueTextBox.Text, output);
+                data = GlobalConfig.Connection.FilterOnSurname(SurnameValueTextBox.Text, data);
             }
             if (NumberOfLaureatesTextBox.Text != "0")
             {
-                output = GlobalConfig.Connection.FilterOnShareNumber(Convert.ToInt32(NumberOfLaureatesTextBox.Text), output);
+                data = GlobalConfig.Connection.FilterOnShareNumber(Convert.ToInt32(NumberOfLaureatesTextBox.Text), data);
             }
-            if (SetDateCheckBox.Checked)
+            if (SetAddFiltersCheckBox.Checked)
             {
-                output = GlobalConfig.Connection.FilterOnDates(Convert.ToInt32(FromDateTimePicker.Text), Convert.ToInt32(ToDateTimePicker.Text), output);
+                data = GlobalConfig.Connection.FilterOnDates(Convert.ToInt32(FromDateTimePicker.Text), Convert.ToInt32(ToDateTimePicker.Text), data);
+                data = GlobalConfig.Connection.FilterOnCategory((string)CategoryComboBox.SelectedItem, data);
             }
 
-            WireUpBox(GlobalConfig.Connection.ConverPrizesToRepresentationObjects(output));
-
-        }
-
-        private void FromDateLabel_Click(object sender, EventArgs e)
-        {
-
+            return data;
         }
     }
 }

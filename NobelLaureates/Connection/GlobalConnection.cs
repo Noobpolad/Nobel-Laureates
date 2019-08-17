@@ -10,6 +10,7 @@ namespace NobelLaureates.Connection
     public abstract class GlobalConnection
     {
         public RootObject Container { get; set; } = new RootObject();
+
         public abstract void InitializePrizes();
         
         public List<RepresentationObject> ConverPrizesToRepresentationObjects(List<PrizeModel> prizes)
@@ -37,6 +38,7 @@ namespace NobelLaureates.Connection
 
         public List<PrizeModel> FilterOnName(string name, List<PrizeModel> curPrizes)
         {
+
             List<PrizeModel> output = new List<PrizeModel>();
 
             foreach (PrizeModel prize in curPrizes)
@@ -134,5 +136,19 @@ namespace NobelLaureates.Connection
             return output;
         }
 
+        public List<PrizeModel> FilterOnCategory(string category, List<PrizeModel> curPrizes)
+        {
+            List<PrizeModel> output = new List<PrizeModel>();
+
+            foreach (PrizeModel prize in curPrizes)
+            {
+                if (prize.Category == category)
+                {
+                    output.Add(prize);
+                }
+            }
+
+            return output;
+        }
     }
 }

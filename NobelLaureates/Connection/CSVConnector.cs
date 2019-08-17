@@ -39,7 +39,7 @@ namespace NobelLaureates.Connection
                                     continue;
                                 }
 
-                                ConvertStringToPrizes(line);
+                                ConvertStringToPrize(line);
                             }
                         }
                     }
@@ -52,7 +52,7 @@ namespace NobelLaureates.Connection
             }
         }
 
-        private static void ConvertStringToPrizes(string data)
+        private static void ConvertStringToPrize(string data)
         {
             string[] columns = ProcessTheString(data);
             PrizeModel curPrize = LookForAPrize(columns[0], columns[1]);

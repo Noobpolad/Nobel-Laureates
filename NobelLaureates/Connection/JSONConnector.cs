@@ -18,6 +18,9 @@ namespace NobelLaureates.Connection
 
         }
 
+        /// <summary>
+        /// Connect to the web page, get the json string and process it to the object.
+        /// </summary>
         public async override void InitializePrizes()
         {
             using (HttpClient client = new HttpClient())
@@ -37,10 +40,13 @@ namespace NobelLaureates.Connection
             }
         }
 
+        /// <summary>
+        /// Convert the json string from web page to the object.
+        /// </summary>
+        /// <param name="data"></param>
         private void ProcessTheData(string data)
         {
-            RootObject model = JsonConvert.DeserializeObject<RootObject>(data);
-            GlobalConfig.Connection.Container = model;
+            GlobalConfig.Connection.Container = JsonConvert.DeserializeObject<RootObject>(data);
         }
     }
 }

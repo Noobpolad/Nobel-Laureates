@@ -75,6 +75,7 @@
             this.Controls.Add(this.ConnectionTypeLabel);
             this.Controls.Add(this.ConnectionsComboBox);
             this.Name = "ConnectionSelectionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
